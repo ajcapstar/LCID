@@ -71,6 +71,13 @@ useGSAP(() => {
           const progress = self.progress;
           const scale = 1 - progress *0.25;
           const rotation = (index % 2===0?5:-5)* progress;
+          const afterOpacity = progress;
+           gsap.set(card,{
+            
+            scale:scale,
+            rotation:rotation,
+            "--after-opacity":afterOpacity
+        })
         }
       })
     }
