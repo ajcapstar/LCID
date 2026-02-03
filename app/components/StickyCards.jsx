@@ -61,11 +61,11 @@ useGSAP(() => {
         end: "top top",
         pin: true,
         pinSpacing: false,
-      })}
+      });}
     if (index < stickyCards.length -1) {
       ScrollTrigger.create({
         trigger:stickyCards[index+1],
-        start:"top buttom",
+        start:"top bottom",
         end :"top top",
         onUpdate:(self)=>{
           const progress = self.progress;
@@ -77,11 +77,11 @@ useGSAP(() => {
             scale:scale,
             rotation:rotation,
             "--after-opacity":afterOpacity
-        })
+        });
         }
       })
     }
-    }) 
+    }); 
       
     },
  {scope: container});

@@ -5,11 +5,12 @@ export default function Home() {
     <>
       <div>
         <section className="intro">
-          <h1>The Foundations</h1>
+         <h1>{'<Landing page/blog-post>'}</h1>
         </section>
         <StickyCards />
         <section className="outro">
-          <h1>Ends In</h1>
+          <h1>{'<footer here>'}</h1>
+
         </section>
       </div>
     </>
