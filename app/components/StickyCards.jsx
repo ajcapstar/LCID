@@ -1,3 +1,12 @@
+"use client";
+
+import{useRef} from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import{useGSAP} from "@gsap/react"
+
+gsap.registerPlugin(ScrollTrigger); 
+
 import Image from "next/image";
 import "./StickyCards.css";
 const StickyCards = () => {
@@ -38,12 +47,44 @@ const StickyCards = () => {
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
   ];
+
+const container = useRef(null);
+
+useGSAP(() => {
+  const stickyCards = document.querySelectorAll(".sticky-card");
+  stickyCards.forEach((card,index) => {
+    if (index<stickyCards.length - 1) {
+      ScrollTrigger.create({
+        trigger: card,
+        start: "top top",
+        endTrigger: stickyCards[stickyCards.length - 1],
+        end: "top top",
+        pin: true,
+        pinSpacing: false,
+      })}
+    if (index < stickyCards.length -1) {
+      ScrollTrigger.create({
+        trigger:stickyCards[index+1],
+        start:"top buttom",
+        end :"top top",
+        onUpdate:(self)=>{
+          const progress = self.progress;
+          const scale = 1 - progress *0.25;
+          const rotation = (index % 2===0?5:-5)* progress;
+        }
+      })
+    }
+    }) 
+      
+    },
+ {scope: container});
+
   return (
-    <div className="sticky-cards">
-      {stickyCardsData.map((cardData, id) => (
+    <div ref={container} className="sticky-cards">
+      {stickyCardsData.map((cardData, index) => (
         <div className="sticky-card" key={index}>
           <div className="sticky-card-index" >
-            <h1>{cardData.id}</h1>
+            <h1>{cardData.index}</h1>
           </div>
           <div className="sticky-card-content" key={index}>
             <div className="sticky-card-content-wrapper">
