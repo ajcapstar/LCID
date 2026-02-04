@@ -39,7 +39,7 @@
   width: 75%;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.5rem;
 }
 .sticky-card-header{
     width: 75%;

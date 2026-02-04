@@ -20,28 +20,28 @@ const StickyCards = () => {
     },
     {
       index: 2,
-      title: "Character",
+      title: "Character 2",
       image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
       index: 3,
-      title: "Character",
+      title: "Character 3",
       image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
       index: 4,
-      title: "Character",
+      title: "Character 4",
       image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
       index: 5,
-      title: "Character",
+      title: "Character    5",
       image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
@@ -81,22 +81,20 @@ useGSAP(() => {
         }
       })
     }
-    }); 
-      
-    },
- {scope: container});
+  });
+}, {scope: container});
 
   return (
     <div ref={container} className="sticky-cards">
-      {stickyCardsData.map((cardData, index) => {
+      {stickyCardsData.map((cardData, index) => (
         <div className="sticky-card" key={index}>
           <div className="sticky-card-index" >
-            <h1>{cardData.index}</h1>
+            {cardData.index}
           </div>
           <div className="sticky-card-content" key={index}>
             <div className="sticky-card-content-wrapper">
               <div className="sticky-card-header">
-                <h1> {cardData.title}</h1>
+                 {cardData.title}
                 <div className="sticky-card-image">
                 <Image src={cardData.image} alt="" width={500} height={500} />
                 </div>
@@ -112,7 +110,7 @@ useGSAP(() => {
             </div>
           </div>
         </div>
-})}
+))}
     </div>
   );
 };
