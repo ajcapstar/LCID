@@ -88,7 +88,7 @@ useGSAP(() => {
 
   return (
     <div ref={container} className="sticky-cards">
-      {stickyCardsData.map((cardData, index) => (
+      {stickyCardsData.map((cardData, index) => {
         <div className="sticky-card" key={index}>
           <div className="sticky-card-index" >
             <h1>{cardData.index}</h1>
@@ -112,7 +112,7 @@ useGSAP(() => {
             </div>
           </div>
         </div>
-      ))}
+})}
     </div>
   );
 };
