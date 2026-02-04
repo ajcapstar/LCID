@@ -89,7 +89,7 @@ useGSAP(() => {
       {stickyCardsData.map((cardData, index) => (
         <div className="sticky-card" key={index}>
           <div className="sticky-card-index" >
-            {cardData.index}
+          <h1>  {cardData.index} </h1>
           </div>
           <div className="sticky-card-content" key={index}>
             <div className="sticky-card-content-wrapper">
