@@ -20,28 +20,28 @@ const StickyCards = () => {
     },
     {
       index: 2,
-      title: "Character 2",
+      title: "Character-2",
       image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
       index: 3,
-      title: "Character 3",
+      title: "Character-3",
       image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
       index: 4,
-      title: "Character 4",
+      title: "Character-4",
       image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
       index: 5,
-      title: "Character    5",
+      title: "Character-5",
       image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
@@ -91,10 +91,9 @@ useGSAP(() => {
           <div className="sticky-card-index" >
           <h1>  {cardData.index} </h1>
           </div>
-          <div className="sticky-card-content" key={index}>
+          <div className="sticky-card-content">
             <div className="sticky-card-content-wrapper">
-              <div className="sticky-card-header">
-                 {cardData.title}
+              <h1 className="sticky-card-header">{cardData.title}</h1>
                 <div className="sticky-card-image">
                 <Image src={cardData.image} alt="" width={500} height={500} />
                 </div>
@@ -106,7 +105,7 @@ useGSAP(() => {
                     <p>{cardData.description}</p>
                   </div>
                 </div>
-              </div>
+             
             </div>
           </div>
         </div>
