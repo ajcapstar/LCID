@@ -78,8 +78,8 @@ useGSAP(() => {
             rotation:rotation,
             "--after-opacity":afterOpacity
         });
-        }
-      })
+        },
+      });
     }
   });
 }, {scope: container});
@@ -105,8 +105,7 @@ useGSAP(() => {
                     <p>{cardData.description}</p>
                   </div>
                 </div>
-             
-            </div>
+              </div>
           </div>
         </div>
 ))}
