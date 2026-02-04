@@ -1,56 +1,101 @@
+"use client";
+
+import{useRef} from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import{useGSAP} from "@gsap/react"
+
+gsap.registerPlugin(ScrollTrigger); 
+
 import Image from "next/image";
 import "./StickyCards.css";
 const StickyCards = () => {
   const stickyCardsData = [
     {
-      id: 1,
+      index: 1,
       title: "Modularity",
-      image: "/sticky-cards/card_1",
+      image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
-      id: 2,
-      title: "Character",
-      image: "/sticky-cards/card_1",
+      index: 2,
+      title: "Character-2",
+      image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
-      id: 3,
-      title: "Character",
-      image: "/sticky-cards/card_1",
+      index: 3,
+      title: "Character-3",
+      image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
-      id: 4,
-      title: "Character",
-      image: "/sticky-cards/card_1",
+      index: 4,
+      title: "Character-4",
+      image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
-      id: 5,
-      title: "Character",
-      image: "/sticky-cards/card_1",
+      index: 5,
+      title: "Character-5",
+      image: "/sticky-cards/card_1.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
   ];
+
+const container = useRef(null);
+
+useGSAP(() => {
+  const stickyCards = document.querySelectorAll(".sticky-card");
+  stickyCards.forEach((card,index) => {
+    if (index<stickyCards.length - 1) {
+      ScrollTrigger.create({
+        trigger: card,
+        start: "top top",
+        endTrigger: stickyCards[stickyCards.length - 1],
+        end: "top top",
+        pin: true,
+        pinSpacing: false,
+      });}
+    if (index < stickyCards.length -1) {
+      ScrollTrigger.create({
+        trigger:stickyCards[index+1],
+        start:"top bottom",
+        end :"top top",
+        onUpdate:(self)=>{
+          const progress = self.progress;
+          const scale = 1 - progress *0.25;
+          const rotation = (index % 2===0?5:-5)* progress;
+          const afterOpacity = progress;
+           gsap.set(card,{
+            
+            scale:scale,
+            rotation:rotation,
+            "--after-opacity":afterOpacity
+        });
+        },
+      });
+    }
+  });
+}, {scope: container});
+
   return (
-    <div className="sticky-cards">
-      {stickyCardsData.map((cardData, id) => (
-        <div className="sticky-card" key={id}>
-          <div className="sticky-card-index" key={id}>
-            <h1>{cardData.id}</h1>
+    <div ref={container} className="sticky-cards">
+      {stickyCardsData.map((cardData, index) => (
+        <div className="sticky-card" key={index}>
+          <div className="sticky-card-index" >
+          <h1>  {cardData.index} </h1>
           </div>
-          <div className="sticky-card-content" key={id}>
+          <div className="sticky-card-content">
             <div className="sticky-card-content-wrapper">
-              <div className="sticky-card-header">
-                <h1> {cardData.title}</h1>
+              <h1 className="sticky-card-header">{cardData.title}</h1>
                 <div className="sticky-card-image">
-                <img src={cardData.image} alt="" />
+                <Image src={cardData.image} alt="" width={500} height={500} />
                 </div>
                 <div className="sticky-card-copy">
                   <div className="sticky-card-copy-title">
@@ -61,10 +106,9 @@ const StickyCards = () => {
                   </div>
                 </div>
               </div>
-            </div>
           </div>
         </div>
-      ))}
+))}
     </div>
   );
 };
