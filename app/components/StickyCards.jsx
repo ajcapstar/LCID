@@ -16,33 +16,33 @@ const StickyCards = () => {
       title: "Modularity",
       image: "/sticky-cards/card_1.jpg",
       description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
+        "We kick off with a site visit and creative adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
       index: 2,
-      title: "Character-2",
-      image: "/sticky-cards/card_1.jpg",
+      title: "Convinience",
+      image: "/sticky-cards/card_2.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
       index: 3,
-      title: "Character-3",
-      image: "/sticky-cards/card_1.jpg",
+      title: "Durability",
+      image: "/sticky-cards/card_3.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
       index: 4,
-      title: "Character-4",
-      image: "/sticky-cards/card_1.jpg",
+      title: "Security",
+      image: "/sticky-cards/card_4.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
     {
       index: 5,
-      title: "Character-5",
-      image: "/sticky-cards/card_1.jpg",
+      title: "flow",
+      image: "/sticky-cards/card_5.jpg",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostru possun possum possum possum possum possum possum possum possum",
     },
@@ -95,7 +95,7 @@ useGSAP(() => {
             <div className="sticky-card-content-wrapper">
               <h1 className="sticky-card-header">{cardData.title}</h1>
                 <div className="sticky-card-image">
-                <Image src={cardData.image} alt="" width={500} height={500} />
+                <Image src={cardData.image} alt=""height={250} width={350}   unoptimized={true} />
                 </div>
                 <div className="sticky-card-copy">
                   <div className="sticky-card-copy-title">
