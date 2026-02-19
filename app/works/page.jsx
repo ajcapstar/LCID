@@ -1,11 +1,11 @@
-const about = () => {
+const works = () => {
   return (
     <div>
       <section className="intro">
-        <h1>about page</h1>
+        <h1>works page</h1>
       </section>
     </div>
   );
 };
 
-export default about;
+export default works;

@@ -1,0 +1,27 @@
+.intro {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  background-color: var(--bg);
+  color: var(--fg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  font-size: 7rem;
+  font-weight: 800;
+  letter-spacing: -0.35rem;
+  line-height: 1.1;
+}
+
+.description {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.image_style {
+  object-fit: cover;
+}
