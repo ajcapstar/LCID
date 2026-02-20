@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useLenis } from "lenis/react";
 import { SplitText } from "gsap/SplitText";
 import { CustomEase } from "gsap/CustomEase";
 
@@ -11,6 +12,7 @@ gsap.registerPlugin(SplitText, CustomEase);
 const Slider = () => {
   const container = useRef(null);
   const [counter, setCounter] = useState(0);
+  const lenis = useLenis();
 
   useGSAP(
     () => {
@@ -153,6 +155,14 @@ const Slider = () => {
           duration: 1,
           ease: "power4.out",
           stagger: 0.075,
+          onComplete: () => {
+            if (lenis) {
+              lenis.scrollTo(".sticky-cards", {
+                duration: 2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // standard lenis easing
+              });
+            }
+          },
         },
         "7.5",
       );
