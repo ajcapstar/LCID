@@ -9,7 +9,7 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata = {
-  title: "LCID | Interior Design",
+  title: "LaserBySonyMusic Landing Page Reveal | Codegrid",
   description: "Redefining space through stillness.",
 };
 
