@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
@@ -11,8 +11,26 @@ gsap.registerPlugin(SplitText, CustomEase);
 
 const Slider = () => {
   const container = useRef(null);
-  const [counter, setCounter] = useState(0);
+  const [isLocked, setIsLocked] = useState(true);
   const lenis = useLenis();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (isLocked) {
+      document.body.style.overflow = "hidden";
+      lenis?.stop();
+    } else {
+      document.body.style.overflow = "auto";
+      lenis?.start();
+    }
+
+    // Cleanup when component unmounts
+    return () => {
+      document.body.style.overflow = "auto";
+      lenis?.start();
+    };
+  }, [isLocked, lenis]);
 
   useGSAP(
     () => {
@@ -156,8 +174,9 @@ const Slider = () => {
           ease: "power4.out",
           stagger: 0.075,
           onComplete: () => {
+            setIsLocked(false);
             if (lenis) {
-              lenis.scrollTo(".sticky-cards", {
+              lenis.scrollTo(".flipCardContainer", {
                 duration: 2,
                 easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // standard lenis easing
               });
@@ -167,7 +186,7 @@ const Slider = () => {
         "7.5",
       );
     },
-    { scope: container },
+    { scope: container, dependencies: [lenis] },
   );
 
   return (

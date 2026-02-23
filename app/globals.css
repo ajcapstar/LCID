@@ -7,6 +7,13 @@
   --base-100: #fff;
   --base-200: #3a3a3a;
   --base-300: #000;
+  /* for FlipCard */
+  --dark: #000;
+  --light: #f9f4eb;
+  --light2: #f0ece5;
+  --accent-1: #e5d9f6;
+  --accent-2: #ffd2f3;
+  --accent-3: #fcdca6;
 }
 
 * {
@@ -50,7 +57,7 @@ p {
   font-size: clamp(2.5rem, 25vw, 25rem);
 }
 nav {
-  position: fixed;
+  position: absolute;
   width: 100%;
   padding: 2rem;
   display: flex;
