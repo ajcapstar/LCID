@@ -122,7 +122,7 @@
   position: relative;
   width: 100%;
   text-align: center;
-  transform: translateY(400%);
+  transform: translateY(40%);
   will-change: transform;
 }
 
@@ -134,106 +134,11 @@
   height: 100svh;
   display: flex;
   justify-content: center;
+  z-index: -1;
   background-color: var(--light);
 }
-/* .section {
-  position: relative;
-  padding: 2rem;
-  width: 100vw;
-  height: 100svh;
-  overflow: hidden;
-}
-
-.hero {
-  background-color: var(--light) !important;
-  color: var(--dark);
-  position: relative;
-}
-
-.about,
-.outro {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--dark);
-  color: var(--light);
-}
-.heroCards {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 35%;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-.heroCards .card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex: 1;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  aspect-ratio: 5/7;
-  position: relative;
-}
-.cardTitle {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-.heroCards .card .label {
-  font-size: 0.7rem;
-}
-.heroCard1 {
-  background-color: var(--accent-1);
-  transform-origin: top-right;
-  z-index: 2;
-}
-.heroCard2 {
-  background-color: var(--accent-2);
-  z-index: 1;
-}
-.heroCard3 {
-  background-color: var(--accent-3);
-  transform-origin: top-left;
-  z-index: 0;
-}
-
-.services {
-  padding: 8rem 2rem;
-}
-
-.servicesHeader {
-  position: relative;
-  width: 100%;
-  text-align: center;
-  transform: translateY(400%);
-  will-change: transform;
-  mix-blend-mode: difference;
-} */
-
-/* .cards {
-  position: relative;
-  width: 100%;
-  height: 100svh;
-  display: flex;
-  justify-content: center;
-  background-color: var(--light);
-}
+/* where it all starts */
 .cardsContainer {
-  position: absolute;
-  top: 400;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4rem;
-} */
-/* .cardsContainer {
   position: relative;
   width: 75%;
   height: 100%;
@@ -241,8 +146,8 @@
   justify-content: center;
   align-items: center;
   gap: 4rem;
-} */
-/* .cardsContainer .card {
+}
+.cardsContainer .card {
   flex: 1;
   position: relative;
   aspect-ratio: 5/7;
@@ -268,7 +173,6 @@
     transform: translate(-50%, -50%);
   }
 }
-
 .flipCard1 .cardWrapper {
   animation-delay: 0s;
 }
@@ -278,7 +182,6 @@
 .flipCard3 .cardWrapper {
   animation-delay: 0.5s;
 }
-
 .flipCardInner {
   position: relative;
   width: 100%;
@@ -327,16 +230,15 @@
   flex-direction: column;
   gap: 0.5rem;
 }
-.cardCopy .label {
-  font-size: 1rem;
+.cardCopy .copy {
   flex: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
-  border-radius: 0.25rem;
+  align-items: center;
   font-size: 1rem;
+  background-color: var(--light2);
+  border-radius: 0.25rem;
 }
-
 .flipCard1 {
   transform: translateX(100%) translateY(-100%) rotate(-5deg) scale(0.25);
   z-index: 2;
@@ -348,7 +250,28 @@
 .flipCard3 {
   transform: translateX(-100%) translateY(-100%) rotate(5deg) scale(0.25);
   z-index: 0;
-} */
-/* .cardsContainer .card {
-  opacity: 0;
-} */
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .cardsContainer {
+    width: 90%;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .cardsContainer {
+    width: 100%;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .cardCopyLabel {
+    font-size: 0.8rem;
+  }
+
+  .servicesHeader .title {
+    font-size: 2.5rem;
+  }
+}

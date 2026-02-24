@@ -61,9 +61,12 @@ const FlipCard = () => {
       >
         <h1 className={styles.title}>Keep scrolling - it gets good</h1>
       </section>
-      <section className={styles.section} id="services-section">
+      <section
+        className={`${styles.section} ${styles.services}`}
+        id="services-section"
+      >
         <div className={styles.servicesHeader}>
-          <h1 className={styles.title}>Stuffs i make so you dont have</h1>
+          <h1 className={styles.title}>Stuff I make so you don't have to</h1>
         </div>
       </section>
       <section
@@ -179,7 +182,7 @@ const FlipCard = () => {
         className={`${styles.section} ${styles.outro}`}
         id="outro-section"
       >
-        <h1 className={styles.title}> the story is not over yet</h1>
+        <h1 className={styles.title}>The story is not over yet</h1>
       </section>
     </div>
   );
