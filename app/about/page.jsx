@@ -11,24 +11,23 @@ const About = () => {
     const teamSection = document.querySelector(`.${styles.team}`);
     const teamMembers = gsap.utils.toArray(`.${styles.teamMember}`);
     const teamMemberCards = gsap.utils.toArray(`.${styles.teamMemberCard}`);
+    const teamMemberInitials = teamMembers.map((member) =>
+      member.querySelector(`.${styles.teamMemberNameInitial} h1`),
+    );
 
     let cardPlaceholderEntrance = null;
     let cardSlideInAnimation = null;
+    let outroAnimation = null;
 
     function initTeamAnimations() {
       if (window.innerWidth < 1000) {
         if (cardPlaceholderEntrance) cardPlaceholderEntrance.kill();
         if (cardSlideInAnimation) cardSlideInAnimation.kill();
+        if (outroAnimation) outroAnimation.kill();
 
-        teamMembers.forEach((member) => {
+        teamMembers.forEach((member, index) => {
           gsap.set(member, { clearProps: "all" });
-
-          const teamMemberInitial = member.querySelector(
-            `.${styles.teamMemberNameInitial} h1`,
-          );
-          if (teamMemberInitial) {
-            gsap.set(teamMemberInitial, { clearProps: "all" });
-          }
+          gsap.set(teamMemberInitials[index], { clearProps: "all" });
         });
 
         teamMemberCards.forEach((card) => {
@@ -39,6 +38,7 @@ const About = () => {
       }
       if (cardPlaceholderEntrance) cardPlaceholderEntrance.kill();
       if (cardSlideInAnimation) cardSlideInAnimation.kill();
+      if (outroAnimation) outroAnimation.kill();
 
       cardPlaceholderEntrance = ScrollTrigger.create({
         trigger: teamSection,
@@ -61,9 +61,6 @@ const About = () => {
 
               const entranceY = 125 - memberEntranceProgress * 125;
               gsap.set(member, { y: `${entranceY}%` });
-              const teamMemberInitial = member.querySelector(
-                `.${styles.teamMemberNameInitial} h1`,
-              );
 
               const initialLetterScaleDelay = 0.4;
               const initialLetterScaleProgress = Math.max(
@@ -72,36 +69,126 @@ const About = () => {
                   (1 - initialLetterScaleDelay),
               );
 
-              if (teamMemberInitial) {
-                gsap.set(teamMemberInitial, {
-                  scale: initialLetterScaleProgress,
-                });
-              }
+              gsap.set(teamMemberInitials[index], {
+                scale: initialLetterScaleProgress,
+              });
             } else if (progress > entranceEnd) {
               gsap.set(member, { y: "0%" });
-              const teamMemberInitial = member.querySelector(
-                `.${styles.teamMemberNameInitial} h1`,
-              );
-              if (teamMemberInitial) gsap.set(teamMemberInitial, { scale: 1 });
-            } else if (progress < entranceStart) {
+              gsap.set(teamMemberInitials[index], { scale: 1 });
+            } else {
               gsap.set(member, { y: "125%" });
-              const teamMemberInitial = member.querySelector(
-                `.${styles.teamMemberNameInitial} h1`,
-              );
-              if (teamMemberInitial) gsap.set(teamMemberInitial, { scale: 0 });
+              gsap.set(teamMemberInitials[index], { scale: 0 });
             }
           });
         },
       });
+      cardSlideInAnimation = ScrollTrigger.create({
+        trigger: teamSection,
+        start: "top top",
+        end: `+=${window.innerHeight * 3}`,
+        pin: true,
+        scrub: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+
+          teamMemberCards.forEach((card, index) => {
+            const slideInStagger = 0.075;
+            const xRotationDuration = 0.4;
+            const xRotationStart = index * slideInStagger;
+            const xRotationEnd = xRotationStart + xRotationDuration;
+
+            if (progress >= xRotationStart && progress <= xRotationEnd) {
+              const cardProgress =
+                (progress - xRotationStart) / xRotationDuration;
+
+              const cardInitialX = 300 - index * 100;
+              const cardTargetX = -50;
+              const cardSlideInX =
+                cardInitialX + cardProgress * (cardTargetX - cardInitialX);
+
+              const cardSlideInRotation = 20 - cardProgress * 20;
+
+              gsap.set(card, {
+                x: `${cardSlideInX}%`,
+                rotation: cardSlideInRotation,
+              });
+            } else if (progress > xRotationEnd) {
+              gsap.set(card, { x: "-50%", rotation: 0 });
+            } else {
+              const cardInitialX = 300 - index * 100;
+              gsap.set(card, { x: `${cardInitialX}%`, rotation: 20 });
+            }
+
+            const cardScaleStagger = 0.12;
+            const cardScaleStart = 0.4 + index * cardScaleStagger;
+            const cardScaleEnd = 0.9; // Adding 10% buffer at the end of the scroll
+
+            if (progress >= cardScaleStart && progress <= cardScaleEnd) {
+              const scaleProgress =
+                (progress - cardScaleStart) / (cardScaleEnd - cardScaleStart);
+              const scaleValue = 0.75 + scaleProgress * 0.25;
+
+              gsap.set(card, {
+                scale: scaleValue,
+              });
+            } else if (progress > cardScaleEnd) {
+              gsap.set(card, {
+                scale: 1,
+              });
+            } else {
+              gsap.set(card, {
+                scale: 0.75,
+              });
+            }
+          });
+        },
+      });
+
+      const outroSection = document.querySelector(`.${styles.outro}`);
+      const outroTitle = outroSection.querySelector(`h1`);
+
+      outroAnimation = gsap.fromTo(
+        outroTitle,
+        {
+          opacity: 0,
+          y: "150%",
+        },
+        {
+          opacity: 1,
+          y: "0%",
+          scrollTrigger: {
+            trigger: outroSection,
+            start: "top 90%",
+            end: "top 40%",
+            scrub: 1,
+          },
+        },
+      );
     }
 
+    let resizeTimer;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        initTeamAnimations();
+        ScrollTrigger.refresh();
+      }, 250);
+    };
+
+    window.addEventListener("resize", handleResize);
+
     initTeamAnimations();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimer);
+    };
   });
 
   return (
     <div className={styles.wrapper}>
       <section className={`${styles.section} ${styles.hero}`}>
-        <h1 className={styles.title}>Faces behind the frame</h1>
+        <h1 className={styles.title}>Faces Behind the Frame</h1>
       </section>
 
       <section className={`${styles.team} ${styles.section}`}>
@@ -173,7 +260,7 @@ const About = () => {
       </section>
 
       <section className={`${styles.outro} ${styles.section}`}>
-        <h1 className={styles.title}>where visions become works </h1>
+        <h1 className={styles.title}>Where Vision Becomes Work</h1>
       </section>
     </div>
   );
