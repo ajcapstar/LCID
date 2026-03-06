@@ -176,7 +176,7 @@ const Slider = () => {
           onComplete: () => {
             setIsLocked(false);
             if (lenis) {
-              lenis.scrollTo(".flipCardContainer", {
+              lenis.scrollTo("#hero-section", {
                 duration: 2,
                 easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // standard lenis easing
               });
@@ -201,10 +201,10 @@ const Slider = () => {
         </div>
         <div className="nav-links">
           <Link href="/">Index</Link>
-          <Link href="#">Collection</Link>
+          <Link href="/works">Collection</Link>
           <Link href="#">Material</Link>
           <Link href="/process">Process</Link>
-          <Link href="#">Info</Link>
+          <Link href="/about">Info</Link>
         </div>
       </nav>
       <section className="hero">
@@ -214,7 +214,19 @@ const Slider = () => {
         <div className="header">
           <h1>LCID</h1>
         </div>
-
+        <div className="slider-cards-container">
+          <div className="slider-cards">
+            <div className="slider-card-1">
+              <img src="sticky-cards/card_1.jpg" alt="" />
+            </div>
+            <div className="slider-card-2">
+              <img src="sticky-cards/card_2.jpg" alt="" />
+            </div>
+            <div className="slider-card-3">
+              <img src="sticky-cards/card_3.jpg" alt="" />
+            </div>
+          </div>
+        </div>
         <div className="hero-footer">
           <p>Performance</p>
           <p>craftsmanship</p>

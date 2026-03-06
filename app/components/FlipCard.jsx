@@ -1,9 +1,39 @@
-import React from "react";
+"use client";
+
+import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import styles from "./FlipCard.module.css";
+gsap.registerPlugin(ScrollTrigger);
 
 const FlipCard = () => {
+  const container = useRef();
+
+  useGSAP(
+    () => {
+      ScrollTrigger.create({
+        trigger: `.${styles.hero}`,
+        start: "top top",
+        end: "75% top",
+        scrub: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          // console.log(progress);
+
+          // You can now drive animations manually using 'progress' (0 to 1)
+          // For example:
+          /*
+          gsap.set(`.${styles.heroCard1}`, { x: progress * 50 });
+          */
+        },
+      });
+    },
+    { scope: container },
+  );
+
   return (
-    <div className={styles.flipCardContainer}>
+    <div className={styles.flipCardContainer} ref={container}>
       <nav className={styles.navbar}>
         <div className={styles.logo}>
           <span className={styles.label}>LCID</span>
