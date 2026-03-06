@@ -188,7 +188,9 @@ const About = () => {
   return (
     <div className={styles.wrapper}>
       <section className={`${styles.section} ${styles.hero}`}>
-        <h1 className={styles.title}>Faces Behind the Frame</h1>
+        <h1 className={styles.title}>
+          FACES BEHIND <br /> THE FRAME
+        </h1>
       </section>
 
       <section className={`${styles.team} ${styles.section}`}>
@@ -260,7 +262,9 @@ const About = () => {
       </section>
 
       <section className={`${styles.outro} ${styles.section}`}>
-        <h1 className={styles.title}>Where Vision Becomes Work</h1>
+        <h1 className={styles.title}>
+          WHERE VISION <br /> BECOMES WORK
+        </h1>
       </section>
     </div>
   );
