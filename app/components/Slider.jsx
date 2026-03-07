@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import styles from "./Slider.module.css";
 import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -40,17 +41,25 @@ const Slider = () => {
         return new SplitText(selector, {
           type: type,
           [`${type}Class`]: className,
-          mask: type, // Note: 'mask' property might need custom CSS or a specific plugin version. Keeping it consistent with user request if it works for them.
+          mask: type,
         });
       };
 
-      const headerSplit = splitText(".header h1", "chars", "char");
-      const navSplit = splitText("nav a", "words", "word");
-      const footerSplit = splitText(".hero-footer p", "words", "word");
+      const headerSplit = splitText(
+        `.${styles.header} h1`,
+        "chars",
+        styles.char,
+      );
+      const navSplit = splitText(`.${styles.nav} a`, "words", styles.word);
+      const footerSplit = splitText(
+        `.${styles["hero-footer"]} p`,
+        "words",
+        styles.word,
+      );
 
       const q = gsap.utils.selector(container);
-      const counterProgress = q(".preloader-counter h1")[0];
-      const counterContainer = q(".preloader-counter")[0];
+      const counterProgress = q(`.${styles["preloader-counter"]} h1`)[0];
+      const counterContainer = q(`.${styles["preloader-counter"]}`)[0];
       const counter = { value: 0 };
 
       const tl = gsap.timeline();
@@ -59,10 +68,15 @@ const Slider = () => {
         duration: 3,
         ease: "power3.out",
         onUpdate: () => {
-          counterProgress.textContent = Math.floor(counter.value);
+          if (counterProgress)
+            counterProgress.textContent = Math.floor(counter.value);
         },
         onComplete: () => {
-          const counterDigits = splitText(counterProgress, "chars", "digit");
+          const counterDigits = splitText(
+            counterProgress,
+            "chars",
+            styles.digit,
+          );
           gsap.to(counterDigits.chars, {
             y: "-100%",
             duration: 0.75,
@@ -86,7 +100,7 @@ const Slider = () => {
       );
 
       tl.to(
-        ".progress-bar",
+        `.${styles["progress-bar"]}`,
         {
           scaleX: 1,
           duration: 3,
@@ -96,7 +110,7 @@ const Slider = () => {
       );
 
       tl.to(
-        ".hero-bg",
+        `.${styles["hero-bg"]}`,
         {
           clipPath: "polygon(35% 35%, 65% 35%, 65% 65%, 35% 65%)",
           duration: 1.5,
@@ -106,7 +120,7 @@ const Slider = () => {
       );
 
       tl.to(
-        ".hero-bg img",
+        `.${styles["hero-bg"]} img`,
         {
           scale: 1.5,
           duration: 1.5,
@@ -116,7 +130,7 @@ const Slider = () => {
       );
 
       tl.to(
-        ".hero-bg",
+        `.${styles["hero-bg"]}`,
         {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
           duration: 2,
@@ -126,7 +140,7 @@ const Slider = () => {
       );
 
       tl.to(
-        ".hero-bg img",
+        `.${styles["hero-bg"]} img`,
         {
           scale: 1,
           duration: 2,
@@ -135,7 +149,7 @@ const Slider = () => {
         "6",
       );
       tl.to(
-        ".progress",
+        `.${styles.progress}`,
         {
           scaleX: 1,
           duration: 3,
@@ -178,7 +192,7 @@ const Slider = () => {
             if (lenis) {
               lenis.scrollTo("#hero-section", {
                 duration: 2,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // standard lenis easing
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
               });
             }
           },
@@ -191,15 +205,15 @@ const Slider = () => {
 
   return (
     <main ref={container}>
-      <div className="preloader-counter">
+      <div className={styles["preloader-counter"]}>
         <h1>0</h1>
       </div>
 
-      <nav>
+      <nav className={styles.nav}>
         <div className="nav-logo">
           <Link href="/">LCID</Link>
         </div>
-        <div className="nav-links">
+        <div className={styles["nav-links"]}>
           <Link href="/">Index</Link>
           <Link href="/works">Collection</Link>
           <Link href="#">Material</Link>
@@ -207,34 +221,21 @@ const Slider = () => {
           <Link href="/about">Info</Link>
         </div>
       </nav>
-      <section className="hero">
-        <div className="hero-bg">
+      <section className={styles.hero}>
+        <div className={styles["hero-bg"]}>
           <img src="sticky-cards/card_4.jpg" alt="" />
         </div>
-        <div className="header">
+        <div className={styles.header}>
           <h1>LCID</h1>
         </div>
-        <div className="slider-cards-container">
-          <div className="slider-cards">
-            <div className="slider-card-1">
-              <img src="sticky-cards/card_1.jpg" alt="" />
-            </div>
-            <div className="slider-card-2">
-              <img src="sticky-cards/card_2.jpg" alt="" />
-            </div>
-            <div className="slider-card-3">
-              <img src="sticky-cards/card_3.jpg" alt="" />
-            </div>
-          </div>
-        </div>
-        <div className="hero-footer">
+
+        <div className={styles["hero-footer"]}>
           <p>Performance</p>
           <p>craftsmanship</p>
           <p>innovation</p>
         </div>
-        <div className="progress-bar">
-          <div className="progress"></div>{" "}
-          {/* Fixed empty div structure if needed */}
+        <div className={styles["progress-bar"]}>
+          <div className={styles.progress}></div>
         </div>
       </section>
     </main>

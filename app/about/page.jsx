@@ -203,7 +203,6 @@ const About = () => {
               <img
                 src="sticky-cards/card_4.jpg"
                 alt=""
-                srcSet=""
                 className={styles.img}
               />
             </div>
@@ -225,7 +224,6 @@ const About = () => {
               <img
                 src="sticky-cards/card_4.jpg"
                 alt=""
-                srcSet=""
                 className={styles.img}
               />
             </div>
@@ -247,7 +245,6 @@ const About = () => {
               <img
                 src="sticky-cards/card_4.jpg"
                 alt=""
-                srcSet=""
                 className={styles.img}
               />
             </div>
