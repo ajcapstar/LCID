@@ -1,10 +1,9 @@
 "use client";
-import Slider from "./components/slider-component/Slider";
 
 export default function Home() {
   return (
     <>
-      <Slider />
+      <h1>starting something new with the nav and shii</h1>
     </>
   );
 }
