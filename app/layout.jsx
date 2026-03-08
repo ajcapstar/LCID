@@ -1,6 +1,6 @@
 import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "./components/SmoothScroll";
+import SmoothScroll from "./components/lenis-smoothcsroll/SmoothScroll";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",

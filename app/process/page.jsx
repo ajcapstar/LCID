@@ -1,4 +1,4 @@
-import StickyCards from "../components/StickyCards";
+import StickyCards from "../components/stickycard-component/StickyCards";
 import styles from "./process.module.css";
 
 const process = () => {
