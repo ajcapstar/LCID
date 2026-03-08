@@ -57,6 +57,13 @@ const Slider = () => {
         styles.word,
       );
 
+      gsap.set(
+        [`.${styles.header}`, `.${styles.nav}`, `.${styles["hero-footer"]}`],
+        {
+          autoAlpha: 1,
+        },
+      );
+
       const q = gsap.utils.selector(container);
       const counterProgress = q(`.${styles["preloader-counter"]} h1`)[0];
       const counterContainer = q(`.${styles["preloader-counter"]}`)[0];

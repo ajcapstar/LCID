@@ -1,5 +1,5 @@
 "use client";
-import Slider from "./components/Slider";
+import Slider from "./components/slider-component/Slider";
 
 export default function Home() {
   return (
