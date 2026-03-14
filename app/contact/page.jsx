@@ -1,10 +1,13 @@
+import styles from "./contact.module.css";
 const contact = () => {
   return (
-    <div>
-      <section className="intro">
-        <h1>contact page</h1>
-      </section>
-    </div>
+    <>
+      <div className="container">
+        <div className="page-header">
+          <h1> Get in touch</h1>
+        </div>
+      </div>
+    </>
   );
 };
 

@@ -1,7 +1,8 @@
 import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "./components/lenis-smoothscroll/SmoothScroll";
-
+import Nav from "./components/nav/nav";
+import PageTransition from "./pageTransition";
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
   subsets: ["latin"],
@@ -20,7 +21,12 @@ export default function RootLayout({ children }) {
         className={`${bricolage.variable} antialiased`}
         suppressHydrationWarning
       >
-        <SmoothScroll>{children}</SmoothScroll>
+        <PageTransition>
+          <SmoothScroll>
+            <Nav />
+            {children}
+          </SmoothScroll>
+        </PageTransition>
       </body>
     </html>
   );

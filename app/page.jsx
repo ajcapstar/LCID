@@ -1,10 +1,14 @@
 "use client";
-import Nav from "./components/nav/nav";
+import styles from "./page.module.css";
 export default function Home() {
   return (
     <>
-      <h1>starting something new with the nav and shii</h1>
-      <Nav />
+      <div className="container">
+        <div className="page-header">
+          <h1> Timeless form</h1>
+        </div>
+      </div>
+      {/* <Nav /> */}
     </>
   );
 }
