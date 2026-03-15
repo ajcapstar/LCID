@@ -116,7 +116,7 @@ nav {
   transform: scaleX(0);
   transform-origin: left;
 }
-.image-overlay {
+.logo-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -130,7 +130,7 @@ nav {
   pointer-events: none;
   opacity: 0;
 }
-.image-container {
+.logo-container {
   width: 200px;
   height: 200px;
   display: flex;
