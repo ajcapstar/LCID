@@ -23,7 +23,7 @@
 }
 
 body {
-  background-color: var(--base-300);
+  font-family: "Bricolage Grotesque", sans-serif;
 }
 img {
   width: 100%;
@@ -33,7 +33,6 @@ img {
 h1 {
   text-transform: uppercase;
   color: #141414;
-  font-family: "Bricolage Grotesque", sans-serif;
   line-height: 1;
   font-size: 12rem;
 }
@@ -105,7 +104,7 @@ nav {
   left: 0;
   width: 100vw;
   height: 100svh;
-  display: fixed;
+  display: flex;
   pointer-events: none;
   z-index: 2;
 }
@@ -117,7 +116,7 @@ nav {
   transform-origin: left;
 }
 .logo-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
