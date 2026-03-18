@@ -5,10 +5,10 @@ const Works = () => {
     <>
       <div className="container">
         <div className="archive">
-          <img src="/sticky-cards/card_1.jpg" alt="" />
-          <img src="/sticky-cards/card_2.jpg" alt="" />
-          <img src="/sticky-cards/card_3.jpg" alt="" />
-          <img src="/sticky-cards/card_4.jpg" alt="" />
+          <img src="/LCID/sticky-cards/card_1.jpg" alt="Card 1" />
+          <img src="/LCID/sticky-cards/card_2.jpg" alt="Card 2" />
+          <img src="/LCID/sticky-cards/card_3.jpg" alt="Card 3" />
+          <img src="/LCID/sticky-cards/card_4.jpg" alt="Card 4" />
         </div>
       </div>
     </>

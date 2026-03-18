@@ -230,7 +230,7 @@ const Slider = () => {
       </nav>
       <section className={styles.hero}>
         <div className={styles["hero-bg"]}>
-          <img src="sticky-cards/card_4.jpg" alt="" />
+          <img src="/LCID/sticky-cards/card_4.jpg" alt="" />
         </div>
         <div className={styles.header}>
           <h1>LCID</h1>

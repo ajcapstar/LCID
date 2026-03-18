@@ -2,6 +2,12 @@
 const nextConfig = {
   /* config options here */
   reactCompiler: true,
+  output: 'export',
+  basePath: '/LCID',
+  assetPrefix: '/LCID',
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;

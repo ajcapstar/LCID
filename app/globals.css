@@ -112,8 +112,8 @@ nav {
   flex: 1;
   height: 100%;
   background-color: #222;
-  transform: scaleX(0);
-  transform-origin: left;
+  transform: scaleX(1);
+  transform-origin: right;
 }
 .logo-overlay {
   position: fixed;
@@ -121,7 +121,7 @@ nav {
   left: 0;
   width: 100vw;
   height: 100svh;
-  z-index: 2;
+  z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -129,6 +129,7 @@ nav {
   pointer-events: none;
   opacity: 0;
 }
+
 .logo-container {
   width: 200px;
   height: 200px;

@@ -1,8 +1,9 @@
 "use client";
 import Logo from "@/app/logo";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 const PageTransition = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -12,142 +13,172 @@ const PageTransition = ({ children }) => {
   const logoRef = useRef(null);
   const isTransitioning = useRef(false);
 
-  useEffect(() => {
-    const createBlocks = () => {
-      if (!overlayRef.current) return;
-      overlayRef.current.innerHTML = "";
-      blocksRef.current = [];
+  // Blocks are now rendered declaratively in the JSX below
 
-      for (let i = 0; i < 20; i++) {
-        const block = document.createElement("div");
-        block.className = "block";
-        overlayRef.current.appendChild(block);
-        blocksRef.current.push(block);
-      }
-    };
+  // Stable and scoped coverPage function for manual calls
+  const { contextSafe } = useGSAP({ scope: overlayRef });
 
-    createBlocks();
+  const coverPage = useCallback(
+    contextSafe((url) => {
+      const path = logoRef.current?.querySelector("path");
 
-    gsap.set(blocksRef.current, { scaleX: 1, transformOrigin: "left" });
-
-    if (logoRef.current) {
-      const path = logoRef.current.querySelector("path");
-      if (path) {
-        const length = path.getTotalLength();
-        gsap.set(path, {
-          strokeDasharray: length,
-          strokeDashoffset: length,
-          fill: "transparent",
+      if (!path) {
+        const tl = gsap.timeline({
+          onComplete: () => router.push(url),
         });
+        tl.to(blocksRef.current, {
+          scaleX: 1,
+          duration: 0.4,
+          stagger: 0.02,
+          ease: "power2.out",
+          transformOrigin: "left",
+        }).to(logoOverlayRef.current, {
+          opacity: 0,
+          duration: 0.25,
+          ease: "power2.out",
+        });
+        return;
       }
-    }
-    revealPage();
 
-    const handleRouteChange = (url) => {
-      // const link = e.currentTarget;
-      // Don't run transition for links that open in a new tab
-      // if (link  .target === "_blank" || e.ctrlKey || e.metaKey) {
-      //   return;
-      // }
+      const length = path.getTotalLength();
+      const tl = gsap.timeline({
+        onComplete: () => router.push(url),
+      });
 
-      // e.preventDefault();
+      tl.to(blocksRef.current, {
+        scaleX: 1,
+        duration: 0.4,
+        stagger: 0.02,
+        ease: "power2.out",
+        transformOrigin: "left",
+      })
+        .addLabel("revealFinished") // Mark the end of block animation
+        .set(
+          logoOverlayRef.current,
+          { opacity: 1 },
+          "revealFinished-=0.2" // Start showing overlay slightly before blocks finish
+        )
+        .set(
+          path,
+          {
+            strokeDasharray: length,
+            strokeDashoffset: length,
+            fill: "transparent",
+          },
+          "revealFinished-=0.2" // Initialize path at the same time
+        )
+        .to(
+          path,
+          {
+            strokeDashoffset: 0,
+            duration: 2,
+            ease: "power2.inOut",
+          },
+          "revealFinished+=0.1" // Start drawing slightly AFTER initialization
+        )
+        .to(
+          path,
+          {
+            fill: "#e3e4d8",
+            duration: 1,
+            ease: "power2.out",
+          },
+          "-=0.5"
+        )
+        .to(logoOverlayRef.current, {
+          opacity: 0,
+          duration: 0.25,
+          ease: "power2.out",
+        });
+    }),
+    [contextSafe, router]
+  );
 
-      // const href = link.href;
-      // const url = new URL(href).pathname;
-
-      // if (url !== pathname) {
-      //   if (isTransitioning.current) return;
-      //   isTransitioning.current = true;
-      //   coverPage(url);
-      // }
+  // Stable handleRouteChange function
+  const handleRouteChange = useCallback(
+    (url) => {
       if (isTransitioning.current) return;
       isTransitioning.current = true;
       coverPage(url);
-    };
+    },
+    [coverPage]
+  );
 
-    const links = document.querySelectorAll('a[href^="/"]');
-    links.forEach((link) => {
-      link.addEventListener("click", (e) => {
+   // Entrance animation scoped to useGSAP
+   useGSAP(
+     () => {
+       // Use requestAnimationFrame to ensure the new page's DOM is painted
+       requestAnimationFrame(() => {
+         // Hard reset to ensure blocks are covered before reveal
+         gsap.set(blocksRef.current, {
+           scaleX: 1,
+           transformOrigin: "right",
+           clearProps: "all",
+         });
+         gsap.set(blocksRef.current, { scaleX: 1, transformOrigin: "right" });
+ 
+         gsap.to(blocksRef.current, {
+           scaleX: 0,
+           duration: 0.4,
+           stagger: 0.02,
+           ease: "power2.out",
+           transformOrigin: "right",
+           onComplete: () => {
+             isTransitioning.current = false;
+           },
+         });
+       });
+     },
+     { scope: overlayRef, dependencies: [pathname] }
+   );
+
+  // Global Event Delegation for Navigation
+  useEffect(() => {
+    const basePath = "/LCID";
+
+    const handleGlobalClick = (e) => {
+      const link = e.target.closest("a");
+      if (!link) return;
+
+      // Filter internal links that aren't opening in a new tab/window
+      const isInternal = link.origin === window.location.origin;
+      const isNewTab =
+        link.target === "_blank" || e.ctrlKey || e.metaKey || e.shiftKey;
+      const isDownload = link.hasAttribute("download");
+
+      if (!isInternal || isNewTab || isDownload) return;
+
+      // Extract and clean the path (strip basePath)
+      const fullPath = link.pathname;
+      const navPath = fullPath.startsWith(basePath)
+        ? fullPath.slice(basePath.length) || "/"
+        : fullPath;
+
+      // If it's a new route, prevent default and trigger transition
+      if (navPath !== pathname) {
         e.preventDefault();
-        const href = e.currentTarget.href;
-        const url = new URL(href).pathname;
-        if (url !== pathname) {
-          handleRouteChange(url);
-        }
-      });
-    });
-    return () => {
-      links.forEach((link) => {
-        link.removeEventListener("click", handleRouteChange);
-      });
+        handleRouteChange(navPath);
+      }
     };
-  }, [router, pathname]);
 
-  const coverPage = (url) => {
-    const tl = gsap.timeline({
-      onComplete: () => router.push(url),
-    });
-    tl.to(blocksRef.current, {
-      scaleX: 1,
-      duration: 0.4,
-      stagger: 0.02,
-      ease: "power2.out",
-      transformOrigin: "left",
-    })
-      .set(logoOverlayRef.current, { opacity: 1 }, "-=0.2")
-      .set(
-        logoRef.current.querySelector("  path"),
-        {
-          strokeDashoffset: logoRef.current
-            .querySelector("path")
-            .getTotalLength(),
-          fill: "transparent",
-        },
-        "-=0.25",
-      )
-      .to(
-        logoRef.current.querySelector("path"),
-        {
-          strokeDashoffset: 0,
-          duration: 2,
-          ease: "power2.inOut",
-        },
-        "-=0.5",
-      )
-      .to(
-        logoRef.current.querySelector("path"),
-        {
-          fill: "#e3e4d8",
-          duration: 1,
-          ease: "power2.out",
-        },
-        "-=0.5",
-      )
-      .to(logoOverlayRef.current, {
-        opacity: 0,
-        duration: 0.25,
-        ease: "power2.out",
+    document.addEventListener("click", handleGlobalClick, { capture: true });
+    return () =>
+      document.removeEventListener("click", handleGlobalClick, {
+        capture: true,
       });
-  };
-
-  const revealPage = () => {
-    gsap.set(blocksRef.current, { scaleX: 1, transformOrigin: "right" });
-
-    gsap.to(blocksRef.current, {
-      scaleX: 0,
-      duration: 0.4,
-      stagger: 0.02,
-      ease: "power2.out",
-      transformOrigin: "right",
-      onComplete: () => {
-        isTransitioning.current = false;
-      },
-    });
-  };
+  }, [pathname, handleRouteChange]);
 
   return (
     <>
-      <div ref={overlayRef} className="transition-overlay"></div>
+      <div ref={overlayRef} className="transition-overlay">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="block"
+            ref={(el) => (blocksRef.current[i] = el)}
+          ></div>
+        ))}
+      </div>
       <div ref={logoOverlayRef} className="logo-overlay">
         <div className="logo-container">
           <Logo ref={logoRef} />

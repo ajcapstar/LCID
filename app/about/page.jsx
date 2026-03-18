@@ -201,7 +201,7 @@ const About = () => {
           <div className={styles.teamMemberCard}>
             <div className={styles.teamMemberImg}>
               <img
-                src="sticky-cards/card_4.jpg"
+                src="/LCID/sticky-cards/card_4.jpg"
                 alt=""
                 className={styles.img}
               />
@@ -222,7 +222,7 @@ const About = () => {
           <div className={styles.teamMemberCard}>
             <div className={styles.teamMemberImg}>
               <img
-                src="sticky-cards/card_4.jpg"
+                src="/LCID/sticky-cards/card_4.jpg"
                 alt=""
                 className={styles.img}
               />
