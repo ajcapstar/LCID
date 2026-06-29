@@ -73,6 +73,7 @@ nav {
 .container {
   position: relative;
   width: 100%;
+  max-width: none;
   height: 100%;
   min-height: 100svh;
   background-color: #e3e4d8;
