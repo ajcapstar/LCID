@@ -1,9 +1,17 @@
 "use client";
 import Logo from "@/app/logo";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, createContext, useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+
+// Create context for programmatic transitions
+const PageTransitionContext = createContext({
+  transitionTo: () => {}
+});
+
+export const usePageTransition = () => useContext(PageTransitionContext);
+
 const PageTransition = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -157,7 +165,9 @@ const PageTransition = ({ children }) => {
       // If it's a new route, prevent default and trigger transition
       if (navPath !== pathname) {
         e.preventDefault();
-        handleRouteChange(navPath);
+        // Append query parameters (search) and hashes to preserve navigation state
+        const targetUrl = navPath + link.search + link.hash;
+        handleRouteChange(targetUrl);
       }
     };
 
@@ -169,7 +179,7 @@ const PageTransition = ({ children }) => {
   }, [pathname, handleRouteChange]);
 
   return (
-    <>
+    <PageTransitionContext.Provider value={{ transitionTo: handleRouteChange }}>
       <div ref={overlayRef} className="transition-overlay">
         {[...Array(20)].map((_, i) => (
           <div
@@ -185,7 +195,7 @@ const PageTransition = ({ children }) => {
         </div>
       </div>
       {children}
-    </>
+    </PageTransitionContext.Provider>
   );
 };
 
