@@ -1,0 +1,57 @@
+.navWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  z-index: 40;
+  padding: 1.5rem;
+  pointer-events: none;
+}
+
+.navCapsule {
+  width: 100%;
+  max-width: 100%; /* Changed from 'none' to '100%' so GSAP can calculate it cleanly */
+  background-color: transparent;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: auto;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: box-shadow 300ms ease;
+}
+
+.logo {
+  color: #000;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  font-size: 1.25rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.link {
+  color: #262626;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 200ms ease;
+}
+
+.link:hover {
+  color: #000;
+}
