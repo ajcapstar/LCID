@@ -21,12 +21,12 @@ export default function RootLayout({ children }) {
         className={`${bricolage.variable} antialiased`}
         suppressHydrationWarning
       >
-        <PageTransition>
-          <SmoothScroll>
+        <SmoothScroll>
+          <PageTransition>
             <Nav />
             {children}
-          </SmoothScroll>
-        </PageTransition>
+          </PageTransition>
+        </SmoothScroll>
       </body>
     </html>
   );

@@ -22,8 +22,10 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   font-family: "Bricolage Grotesque", sans-serif;
+  background-color: #e3e4d8;
 }
 img {
   width: 100%;
@@ -73,7 +75,7 @@ nav {
 .container {
   position: relative;
   width: 100%;
-  max-width: none;
+  max-width: none !important;
   height: 100%;
   min-height: 100svh;
   background-color: #e3e4d8;

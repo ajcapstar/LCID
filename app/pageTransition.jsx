@@ -4,6 +4,7 @@ import { useEffect, useRef, useCallback, createContext, useContext } from "react
 import { useRouter, usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useLenis } from "lenis/react";
 
 // Create context for programmatic transitions
 const PageTransitionContext = createContext({
@@ -20,6 +21,7 @@ const PageTransition = ({ children }) => {
   const blocksRef = useRef([]);
   const logoRef = useRef(null);
   const isTransitioning = useRef(false);
+  const lenis = useLenis();
 
   // Blocks are now rendered declaratively in the JSX below
 
@@ -107,9 +109,10 @@ const PageTransition = ({ children }) => {
     (url) => {
       if (isTransitioning.current) return;
       isTransitioning.current = true;
+      if (lenis) lenis.stop();
       coverPage(url);
     },
-    [coverPage]
+    [coverPage, lenis]
   );
 
    // Entrance animation scoped to useGSAP
@@ -125,6 +128,10 @@ const PageTransition = ({ children }) => {
          });
          gsap.set(blocksRef.current, { scaleX: 1, transformOrigin: "right" });
  
+         if (lenis) {
+           lenis.scrollTo(0, { immediate: true });
+         }
+
          gsap.to(blocksRef.current, {
            scaleX: 0,
            duration: 0.4,
@@ -133,11 +140,16 @@ const PageTransition = ({ children }) => {
            transformOrigin: "right",
            onComplete: () => {
              isTransitioning.current = false;
+             if (lenis) {
+               lenis.start();
+               lenis.resize();
+               gsap.delayedCall(0.1, () => lenis.resize());
+             }
            },
          });
        });
      },
-     { scope: overlayRef, dependencies: [pathname] }
+     { scope: overlayRef, dependencies: [pathname, lenis] }
    );
 
   // Global Event Delegation for Navigation
