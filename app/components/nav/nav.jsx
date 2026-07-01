@@ -10,57 +10,76 @@ const Nav = () => {
   const navRef = useRef(null);
   const lenis = useLenis();
   const pathname = usePathname();
-  const navAnimationRef = useRef(null);
+  const isDocked = useRef(false);
 
   useEffect(() => {
     if (!lenis || !navRef.current) return;
 
-    // 1. HARD-RESET THE COLOR STARTING CHANNELS
-    // Set alpha to 0 of your clean white/grey value so it transitions cleanly without mud
-    gsap.set(navRef.current, { 
+    // 1. Set initial layout states
+    gsap.set(navRef.current, {
       backgroundColor: "rgba(247, 247, 250, 0)",
-      maxWidth: "100%" 
-    });
-
-    // 2. Set up the fluid GSAP morph timeline
-    navAnimationRef.current = gsap.to(navRef.current, {
-      maxWidth: "600px",
-      backgroundColor: "rgba(247, 247, 250, 1)", // Your custom light-capsule background
-      borderRadius: "9999px",
-      paddingLeft: "2rem",
-      paddingRight: "2rem",
-      paddingTop: "0.75rem",
-      paddingBottom: "0.75rem",
-      boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.03)",
-      border: "1px solid rgba(220, 220, 230, 0.6)", // Sleek subtle accent ring
-      duration: 0.6, // Tighter duration for snappier feedback when leaving the top layout
-      ease: "power2.out",
-      paused: true,
+      maxWidth: "100%",
+      borderColor: "rgba(220, 220, 230, 0)",
+      borderRadius: "0px",
     });
 
     const handleScroll = (e) => {
-      // Triggers right at 50px of vertical travel
       if (e.scroll > 50) {
-        navAnimationRef.current.play();
+        if (!isDocked.current) {
+          isDocked.current = true;
+          gsap.to(navRef.current, {
+            maxWidth: "600px",
+            backgroundColor: "rgba(247, 247, 250, 1)",
+            borderRadius: "9999px",
+            paddingTop: "0.75rem",
+            paddingBottom: "0.75rem",
+            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.03)",
+            borderColor: "rgba(220, 220, 230, 0.6)",
+            duration: 0.4,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        }
       } else {
-        navAnimationRef.current.reverse();
+        if (isDocked.current) {
+          isDocked.current = false;
+          gsap.to(navRef.current, {
+            maxWidth: "100%",
+            backgroundColor: "rgba(247, 247, 250, 0)",
+            borderRadius: "0px",
+            paddingTop: "1rem",
+            paddingBottom: "1rem",
+            boxShadow: "none",
+            borderColor: "rgba(220, 220, 230, 0)",
+            duration: 0.4,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        }
       }
     };
 
-    // Bind seamlessly into your core Lenis lifecycle
     lenis.on("scroll", handleScroll);
     return () => {
       lenis.off("scroll", handleScroll);
-      if (navAnimationRef.current) {
-        navAnimationRef.current.kill();
-      }
+      gsap.killTweensOf(navRef.current);
     };
   }, [lenis]);
 
   // Instantly reset navigation pill back to full width on route changes
   useEffect(() => {
-    if (navAnimationRef.current) {
-      navAnimationRef.current.progress(0).pause();
+    isDocked.current = false;
+    if (navRef.current) {
+      gsap.killTweensOf(navRef.current);
+      gsap.set(navRef.current, {
+        maxWidth: "100%",
+        backgroundColor: "rgba(247, 247, 250, 0)",
+        borderRadius: "0px",
+        paddingTop: "1rem",
+        paddingBottom: "1rem",
+        boxShadow: "none",
+        borderColor: "rgba(220, 220, 230, 0)",
+      });
     }
   }, [pathname]);
 
