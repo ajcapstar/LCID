@@ -11,15 +11,6 @@
   gap: 2em;
   overflow: hidden;
 }
-.projects,
-.loader,
-.locations {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2em;
-}
 
 .loader {
   align-items: center;
@@ -41,9 +32,18 @@
   color: #3a3a3a;
 }
 
-
+.projects,
+.loader,
+.locations {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2em;
+}
 
 .projects-header,
+
 .project-item,
 .locations-header,
 .location-item {
