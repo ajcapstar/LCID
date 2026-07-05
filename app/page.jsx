@@ -103,6 +103,25 @@ export default function Home() {
           });
         },
       });
+      overlayTimeline.to(
+        [`.${styles["projects-header"]}`, `.${styles["project-item"]}`],
+        {
+          opacity: 1,
+          duration: 0.15,
+          stagger: 0.075,
+          delay: 1,
+        },
+      );
+
+      overlayTimeline.to(
+        [`.${styles["locations-header"]}`, `.${styles["location-item"]}`],
+        {
+          opacity: 1,
+          duration: 0.15,
+          stagger: 0.075,
+        },
+        "<",
+      );
 
       overlayTimeline.to(`.${styles["project-item"]}`, {
         color: "#fff",
@@ -117,7 +136,119 @@ export default function Home() {
           duration: 0.15,
           stagger: 0.075,
         },
-        "<"
+        "<",
+      );
+
+      overlayTimeline.to(
+        [`.${styles["projects-header"]}`, `.${styles["project-item"]}`],
+        {
+          opacity: 0,
+          duration: 0.15,
+          stagger: 0.075,
+        },
+      );
+
+      overlayTimeline.to(
+        [`.${styles["locations-header"]}`, `.${styles["location-item"]}`],
+        {
+          opacity: 0,
+          duration: 0.15,
+          stagger: 0.075,
+        },
+        "<",
+      );
+
+      overlayTimeline.to(`.${styles.overlay}`, {
+        opacity: 0,
+        duration: 0.5,
+        delay: 1.5,
+      });
+
+      imagesTimeline.to(`.${styles.img}`, {
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+        duration: 1,
+        delay: 2.5,
+        stagger: 0.05,
+        ease: "hop",
+        onStart: () => {
+          setTimeout(() => {
+            startImageRotation();
+            gsap.to(`.${styles.loader}`, { opacity: 0, duration: 0.3 });
+          }, 1000);
+        },
+      });
+
+      imagesTimeline.to(images, {
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+        duration: 1,
+        delay: 2.5,
+        stagger: 0.05,
+        ease: "hop",
+      });
+
+      imagesTimeline.to(heroImage, {
+        y: -50,
+        duration: 1,
+        ease: "hop",
+      });
+
+      imagesTimeline.to(heroImage, {
+        scale: 4,
+        clipPath: "polygon(20% 10%, 80% 10%, 80% 90%, 20% 90%)",
+        duration: 1.5,
+        ease: "hop",
+        onStart: () => {
+          gsap.to(heroImage.querySelector("img"), {
+            scale: 1,
+            duration: 1.5,
+            ease: "hop",
+          });
+          gsap.to(`.${styles["banner-img"]}`, {
+            scale: 1,
+            delay: 0.5,
+            duration: 0.5,
+          });
+          gsap.to(`.${styles.nav}`, {
+            y: "0%",
+            duration: 1,
+            ease: "hop",
+            delay: 0.25,
+          });
+        },
+      });
+
+      imagesTimeline.to(
+        ".banner-img-1",
+        {
+          left: "40%",
+          rotate: -20,
+          duration: 1.5,
+          delay: 0.5,
+          ease: "hop",
+        },
+        "<",
+      );
+      imagesTimeline.to(
+        ".banner-img-2",
+        {
+          left: "60%",
+          rotate: 20,
+          duration: 1.5,
+          delay: 0.5,
+          ease: "hop",
+        },
+        "<",
+      );
+
+      textTimeline.to(
+        `.${styles.title} .${styles.word}`,
+        {
+          y: "0%",
+          duration: 1,
+          stagger: 0.1,
+          delay: 9.5,
+          ease: "power3.out",
+        },
       );
     }
 
@@ -125,16 +256,6 @@ export default function Home() {
       // Stub - to be implemented
     }
   }, []);
-  // return (
-  //   <>
-  //     <div className="container">
-  //       <div className="page-header">
-  //         <h1> Timeless form</h1>
-  //       </div>
-  //     </div>
-  //     {/* <Nav /> */}
-  //   </>
-  // );
 
   return (
     <>
@@ -193,20 +314,12 @@ export default function Home() {
       </div>
 
       <nav className={styles.nav}>
-        <div className={styles.links}>
-          <a href="#">Index</a>
-          <a href="#">Work</a>
-        </div>
         <div className={styles["nav-logo"]}>
           <a href="#">
             Nova
             <br />
             Vice
           </a>
-        </div>
-        <div className={styles.links}>
-          <a href="#">About</a>
-          <a href="#">Contact</a>
         </div>
       </nav>
 

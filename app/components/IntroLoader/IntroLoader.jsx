@@ -9,6 +9,16 @@ const IntroLoader = () => {
           <div className={styles["projects-header"]}>
             <p>Projects</p>
             <p>Directors</p>
+            <p>Projects</p>
+            <p>Directors</p>
+            <p>Projects</p>
+            <p>Directors</p>
+            <p>Projects</p>
+            <p>Directors</p>
+            <p>Projects</p>
+            <p>Directors</p>
+            <p>Projects</p>
+            <p>Directors</p>
           </div>
         </div>
         <div className={styles.loader}>
@@ -76,10 +86,14 @@ const IntroLoader = () => {
         </div>
       </nav>
 
-      <div className={`${styles["banner-img"]} ${styles["banner-img-1"] || "banner-img-1"}`}>
+      <div
+        className={`${styles["banner-img"]} ${styles["banner-img-1"] || "banner-img-1"}`}
+      >
         <img src="/LCID/sticky-cards/card_2.jpg" alt="" />
       </div>
-      <div className={`${styles["banner-img"]} ${styles["banner-img-2"] || "banner-img-2"}`}>
+      <div
+        className={`${styles["banner-img"]} ${styles["banner-img-2"] || "banner-img-2"}`}
+      >
         <img src="/LCID/sticky-cards/card_5.jpg" alt="" />
       </div>
 
