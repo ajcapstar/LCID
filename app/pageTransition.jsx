@@ -169,11 +169,14 @@ const PageTransition = ({ children }) => {
         ? fullPath.slice(basePath.length) || "/"
         : fullPath;
 
-      if (navPath !== pathname) {
-        e.preventDefault();
-        const targetUrl = navPath + link.search + link.hash;
-        handleRouteChange(targetUrl);
+      if (navPath === pathname) {
+        e.preventDefault(); // Already here — do nothing, don't reload
+        return;
       }
+
+      e.preventDefault();
+      const targetUrl = navPath + link.search + link.hash;
+      handleRouteChange(targetUrl);
     };
 
     document.addEventListener("click", handleGlobalClick, { capture: true });

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./IntroLoader.module.css";
+import styles from "../../page.module.css";
 
 const IntroLoader = () => {
   return (
@@ -9,25 +9,50 @@ const IntroLoader = () => {
           <div className={styles["projects-header"]}>
             <p>Projects</p>
             <p>Directors</p>
-            <p>Projects</p>
-            <p>Directors</p>
-            <p>Projects</p>
-            <p>Directors</p>
-            <p>Projects</p>
-            <p>Directors</p>
-            <p>Projects</p>
-            <p>Directors</p>
-            <p>Projects</p>
-            <p>Directors</p>
+          </div>
+          <div className={styles["project-item"]}>
+            <p>Lawrence</p>
+            <p>Cephaas</p>
+          </div>
+          <div className={styles["project-item"]}>
+            <p>Lawrence</p>
+            <p>Cephaas</p>
+          </div>
+          <div className={styles["project-item"]}>
+            <p>Lawrence</p>
+            <p>Cephaas</p>
+          </div>
+          <div className={styles["project-item"]}>
+            <p>Lawrence</p>
+            <p>Cephaas</p>
+          </div>
+          <div className={styles["project-item"]}>
+            <p>Lawrence</p>
+            <p>Cephaas</p>
           </div>
         </div>
         <div className={styles.loader}>
-          <h1 className="logo-line-1">Nova</h1>
-          <h1 className="logo-line-2">Vice</h1>
+          <h1 className="logo-line-1">LC</h1>
+          <h1 className="logo-line-2">ID</h1>
         </div>
         <div className={styles.locations}>
           <div className={styles["locations-header"]}>
             <p>Location</p>
+          </div>
+          <div className={styles["location-item"]}>
+            <p>Intelligence Design</p>
+          </div>
+          <div className={styles["location-item"]}>
+            <p>Intelligence Design</p>
+          </div>
+          <div className={styles["location-item"]}>
+            <p>Intelligence Design</p>
+          </div>
+          <div className={styles["location-item"]}>
+            <p>Intelligence Design</p>
+          </div>
+          <div className={styles["location-item"]}>
+            <p>Intelligence Design</p>
           </div>
         </div>
       </div>
@@ -69,20 +94,8 @@ const IntroLoader = () => {
       </div>
 
       <nav className={styles.nav}>
-        <div className={styles.links}>
-          <a href="#">Index</a>
-          <a href="#">Work</a>
-        </div>
         <div className={styles["nav-logo"]}>
-          <a href="#">
-            Nova
-            <br />
-            Vice
-          </a>
-        </div>
-        <div className={styles.links}>
-          <a href="#">About</a>
-          <a href="#">Contact</a>
+          <a href="#">LCID</a>
         </div>
       </nav>
 
@@ -98,12 +111,22 @@ const IntroLoader = () => {
       </div>
 
       <div className={styles["intro-copy"]}>
-        <h3>Creative Solutions</h3>
-        <h3>Impactful Results</h3>
+        <h3>
+          <span className={styles.word}>Creative </span>
+          <span className={styles.word}>Solutions </span>
+        </h3>
+        <h3>
+          <span className={styles.word}>Impactful </span>
+          <span className={styles.word}>Results </span>
+        </h3>
       </div>
 
       <div className={styles.title}>
-        <h1>Crafting Bold Experiences</h1>
+        <h1>
+          <span className={styles.word}>Crafting </span>
+          <span className={styles.word}>Bold </span>
+          <span className={styles.word}>Experiences </span>
+        </h1>
       </div>
     </>
   );

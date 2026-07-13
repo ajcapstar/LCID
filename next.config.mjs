@@ -10,4 +10,17 @@ const nextConfig = {
   },
 };
 
+if (process.env.NODE_ENV === 'development') {
+  nextConfig.redirects = async () => {
+    return [
+      {
+        source: '/',
+        destination: '/LCID',
+        permanent: true,
+        basePath: false,
+      },
+    ];
+  };
+}
+
 export default nextConfig;
