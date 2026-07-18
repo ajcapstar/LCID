@@ -107,25 +107,25 @@ const IntroLoader = () => {
       <div
         className={`${styles["banner-img"]} ${styles["banner-img-2"] || "banner-img-2"}`}
       >
-        <img src="/LCID/sticky-cards/card_5.jpg" alt="" />
+        <img src="/LCID/sticky-cards/card_3.jpg" alt="" />
       </div>
 
       <div className={styles["intro-copy"]}>
         <h3>
-          <span className={styles.word}>Creative </span>
-          <span className={styles.word}>Solutions </span>
+          <span className={styles.word}>Creative</span>{" "}
+          <span className={styles.word}>Solutions</span>
         </h3>
         <h3>
-          <span className={styles.word}>Impactful </span>
-          <span className={styles.word}>Results </span>
+          <span className={styles.word}>Impactful</span>{" "}
+          <span className={styles.word}>Results</span>
         </h3>
       </div>
 
       <div className={styles.title}>
         <h1>
-          <span className={styles.word}>Crafting </span>
-          <span className={styles.word}>Bold </span>
-          <span className={styles.word}>Experiences </span>
+          <span className={styles.word}>Crafting</span>{" "}
+          <span className={styles.word}>Bold</span>{" "}
+          <span className={styles.word}>Experiences</span>
         </h1>
       </div>
     </>

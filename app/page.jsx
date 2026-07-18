@@ -58,7 +58,7 @@ export default function Home() {
     }
 
     function setupInitialStates() {
-      gsap.set(`.${styles.nav}`, {
+      gsap.set([`.${styles.nav}`, ".global-nav"], {
         y: "-125%",
       });
 
@@ -203,7 +203,7 @@ export default function Home() {
             delay: 0.5,
             duration: 0.5,
           });
-          gsap.to(`.${styles.nav}`, {
+          gsap.to([`.${styles.nav}`, ".global-nav"], {
             y: "0%",
             duration: 1,
             ease: "hop",
@@ -235,13 +235,27 @@ export default function Home() {
         "<",
       );
 
-      textTimeline.to(`.${styles.title} .${styles.word}`, {
-        y: "0%",
-        duration: 1,
-        stagger: 0.1,
-        delay: 9.5,
-        ease: "power3.out",
-      });
+      textTimeline.to(
+        `.${styles["intro-copy"]} .${styles.word}`,
+        {
+          y: "0%",
+          duration: 1,
+          stagger: 0.1,
+          ease: "power3.out",
+        },
+        9.5,
+      );
+
+      textTimeline.to(
+        `.${styles.title} .${styles.word}`,
+        {
+          y: "0%",
+          duration: 1,
+          stagger: 0.1,
+          ease: "power3.out",
+        },
+        9.5,
+      );
     }
 
     function initializeDynamicContent() {

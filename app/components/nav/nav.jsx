@@ -6,7 +6,7 @@ import { useLenis } from "lenis/react"; // 1. Grabbing your global Lenis instanc
 import { gsap } from "gsap";
 import styles from "./nav.module.css";
 
-const Nav = () => {
+const Nav = () => { 
   const navRef = useRef(null);
   const lenis = useLenis();
   const pathname = usePathname();
@@ -86,7 +86,7 @@ const Nav = () => {
 
   return (
     // Outer structural wrapper styled via CSS module
-    <div className={styles.navWrapper}>
+    <div className={`${styles.navWrapper} global-nav`}>
       {/* Dynamic Navigation Capsule Morphing via GSAP */}
       <div ref={navRef} role="navigation" className={styles.navCapsule}>
         {/* Logo Element */}
