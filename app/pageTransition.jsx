@@ -1,7 +1,6 @@
 "use client";
 import Logo from "@/app/logo";
 import {
-  useEffect,
   useRef,
   useCallback,
   createContext,
@@ -151,40 +150,8 @@ const PageTransition = ({ children }) => {
     { scope: overlayRef, dependencies: [pathname, lenis] }, // Removed requestAnimationFrame wrapper
   );
 
-  // Global Event Delegation
-  useEffect(() => {
-    const basePath = "/LCID";
-    const handleGlobalClick = (e) => {
-      const link = e.target.closest("a");
-      if (!link) return;
-      const isInternal = link.origin === window.location.origin;
-      const isNewTab =
-        link.target === "_blank" || e.ctrlKey || e.metaKey || e.shiftKey;
-      const isDownload = link.hasAttribute("download");
-
-      if (!isInternal || isNewTab || isDownload) return;
-
-      const fullPath = link.pathname;
-      const navPath = fullPath.startsWith(basePath)
-        ? fullPath.slice(basePath.length) || "/"
-        : fullPath;
-
-      if (navPath === pathname) {
-        e.preventDefault(); // Already here — do nothing, don't reload
-        return;
-      }
-
-      e.preventDefault();
-      const targetUrl = navPath + link.search + link.hash;
-      handleRouteChange(targetUrl);
-    };
-
-    document.addEventListener("click", handleGlobalClick, { capture: true });
-    return () =>
-      document.removeEventListener("click", handleGlobalClick, {
-        capture: true,
-      });
-  }, [pathname, handleRouteChange]);
+  // Navigation transitions are now handled per-link via usePageTransition()
+  // so no global click capture is needed here.
 
   return (
     <PageTransitionContext.Provider value={{ transitionTo: handleRouteChange }}>

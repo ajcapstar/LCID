@@ -2,8 +2,9 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLenis } from "lenis/react"; // 1. Grabbing your global Lenis instance
+import { useLenis } from "lenis/react";
 import { gsap } from "gsap";
+import { usePageTransition } from "@/app/pageTransition";
 import styles from "./nav.module.css";
 
 const Nav = () => { 
@@ -11,6 +12,7 @@ const Nav = () => {
   const lenis = useLenis();
   const pathname = usePathname();
   const isDocked = useRef(false);
+  const { transitionTo } = usePageTransition();
 
   useEffect(() => {
     if (!lenis || !navRef.current) return;
@@ -91,7 +93,11 @@ const Nav = () => {
       <div ref={navRef} role="navigation" className={styles.navCapsule}>
         {/* Logo Element */}
         <div className="nav-logo">
-          <Link href="/" className={styles.logo}>
+          <Link
+            href="/"
+            className={styles.logo}
+            onClick={(e) => { e.preventDefault(); transitionTo("/"); }}
+          >
             <svg
               width="70px"
               height="auto"
@@ -113,13 +119,25 @@ const Nav = () => {
 
         {/* Navigation Links Grid */}
         <div className={styles.navLinks}>
-          <Link href="/about" className={styles.link}>
+          <Link
+            href="/about"
+            className={styles.link}
+            onClick={(e) => { e.preventDefault(); transitionTo("/about"); }}
+          >
             About
           </Link>
-          <Link href="/contact" className={styles.link}>
+          <Link
+            href="/contact"
+            className={styles.link}
+            onClick={(e) => { e.preventDefault(); transitionTo("/contact"); }}
+          >
             Contact
           </Link>
-          <Link href="/works" className={styles.link}>
+          <Link
+            href="/works"
+            className={styles.link}
+            onClick={(e) => { e.preventDefault(); transitionTo("/works"); }}
+          >
             Works
           </Link>
         </div>

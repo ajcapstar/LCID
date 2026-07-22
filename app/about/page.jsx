@@ -36,112 +36,68 @@ const About = () => {
 
         return;
       }
+
       if (cardPlaceholderEntrance) cardPlaceholderEntrance.kill();
       if (cardSlideInAnimation) cardSlideInAnimation.kill();
       if (outroAnimation) outroAnimation.kill();
 
+      // ── Set initial states ──────────────────────────────────────────────────
+      teamMembers.forEach((member, index) => {
+        gsap.set(member, { y: "125%" });
+        gsap.set(teamMemberInitials[index], { scale: 0 });
+      });
+
+      teamMemberCards.forEach((card, index) => {
+        gsap.set(card, { x: `${300 - index * 100}%`, rotation: 20, scale: 0.75 });
+      });
+
+      // ── Entrance timeline (members rising up + initials scaling in) ─────────
+      const entranceTl = gsap.timeline({ paused: true });
+      teamMembers.forEach((member, index) => {
+        const entranceStart = index * 0.15;
+        const entranceDuration = 0.7;
+        const scaleStart = entranceStart + entranceDuration * 0.4;
+        const scaleDuration = entranceDuration * 0.6;
+
+        entranceTl
+          .to(member, { y: "0%", duration: entranceDuration, ease: "none" }, entranceStart)
+          .to(teamMemberInitials[index], { scale: 1, duration: scaleDuration, ease: "none" }, scaleStart);
+      });
+
       cardPlaceholderEntrance = ScrollTrigger.create({
+        animation: entranceTl,
         trigger: teamSection,
         start: "top bottom",
         end: "top top",
         scrub: 1,
-
-        onUpdate: (self) => {
-          const progress = self.progress;
-
-          teamMembers.forEach((member, index) => {
-            const entranceDelay = 0.15;
-            const entranceDuration = 0.7;
-            const entranceStart = index * entranceDelay;
-            const entranceEnd = entranceStart + entranceDuration;
-
-            if (progress >= entranceStart && progress <= entranceEnd) {
-              const memberEntranceProgress =
-                (progress - entranceStart) / entranceDuration;
-
-              const entranceY = 125 - memberEntranceProgress * 125;
-              gsap.set(member, { y: `${entranceY}%` });
-
-              const initialLetterScaleDelay = 0.4;
-              const initialLetterScaleProgress = Math.max(
-                0,
-                (memberEntranceProgress - initialLetterScaleDelay) /
-                  (1 - initialLetterScaleDelay),
-              );
-
-              gsap.set(teamMemberInitials[index], {
-                scale: initialLetterScaleProgress,
-              });
-            } else if (progress > entranceEnd) {
-              gsap.set(member, { y: "0%" });
-              gsap.set(teamMemberInitials[index], { scale: 1 });
-            } else {
-              gsap.set(member, { y: "125%" });
-              gsap.set(teamMemberInitials[index], { scale: 0 });
-            }
-          });
-        },
       });
+
+      // ── Card slide-in + scale timeline ──────────────────────────────────────
+      const cardTl = gsap.timeline({ paused: true });
+      teamMemberCards.forEach((card, index) => {
+        const xRotationStart = index * 0.075;
+        cardTl.to(
+          card,
+          { x: "-50%", rotation: 0, duration: 0.4, ease: "none" },
+          xRotationStart,
+        );
+
+        const cardScaleStart = 0.4 + index * 0.12;
+        const cardScaleDuration = 0.9 - cardScaleStart;
+        cardTl.to(
+          card,
+          { scale: 1, duration: cardScaleDuration, ease: "none" },
+          cardScaleStart,
+        );
+      });
+
       cardSlideInAnimation = ScrollTrigger.create({
+        animation: cardTl,
         trigger: teamSection,
         start: "top top",
         end: `+=${window.innerHeight * 3}`,
         pin: true,
         scrub: 1,
-        onUpdate: (self) => {
-          const progress = self.progress;
-
-          teamMemberCards.forEach((card, index) => {
-            const slideInStagger = 0.075;
-            const xRotationDuration = 0.4;
-            const xRotationStart = index * slideInStagger;
-            const xRotationEnd = xRotationStart + xRotationDuration;
-
-            if (progress >= xRotationStart && progress <= xRotationEnd) {
-              const cardProgress =
-                (progress - xRotationStart) / xRotationDuration;
-
-              const cardInitialX = 300 - index * 100;
-              const cardTargetX = -50;
-              const cardSlideInX =
-                cardInitialX + cardProgress * (cardTargetX - cardInitialX);
-
-              const cardSlideInRotation = 20 - cardProgress * 20;
-
-              gsap.set(card, {
-                x: `${cardSlideInX}%`,
-                rotation: cardSlideInRotation,
-              });
-            } else if (progress > xRotationEnd) {
-              gsap.set(card, { x: "-50%", rotation: 0 });
-            } else {
-              const cardInitialX = 300 - index * 100;
-              gsap.set(card, { x: `${cardInitialX}%`, rotation: 20 });
-            }
-
-            const cardScaleStagger = 0.12;
-            const cardScaleStart = 0.4 + index * cardScaleStagger;
-            const cardScaleEnd = 0.9; // Adding 10% buffer at the end of the scroll
-
-            if (progress >= cardScaleStart && progress <= cardScaleEnd) {
-              const scaleProgress =
-                (progress - cardScaleStart) / (cardScaleEnd - cardScaleStart);
-              const scaleValue = 0.75 + scaleProgress * 0.25;
-
-              gsap.set(card, {
-                scale: scaleValue,
-              });
-            } else if (progress > cardScaleEnd) {
-              gsap.set(card, {
-                scale: 1,
-              });
-            } else {
-              gsap.set(card, {
-                scale: 0.75,
-              });
-            }
-          });
-        },
       });
 
       const outroSection = document.querySelector(`.${styles.outro}`);
