@@ -1,11 +1,6 @@
 "use client";
 import Logo from "@/app/logo";
-import {
-  useRef,
-  useCallback,
-  createContext,
-  useContext,
-} from "react";
+import { useRef, useCallback, createContext, useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -29,73 +24,70 @@ const PageTransition = ({ children }) => {
 
   const { contextSafe } = useGSAP({ scope: overlayRef });
 
-  const coverPage = useCallback(
-    contextSafe((url) => {
-      const path = logoRef.current?.querySelector("path");
+  const coverPage = contextSafe((url) => {
+    const path = logoRef.current?.querySelector("path");
 
-      if (lenis) lenis.stop(); // Freeze scrolling immediately
+    if (lenis) lenis.stop(); // Freeze scrolling immediately
 
-      // If the logo path doesn't exist for some reason, fallback safely
-      if (!path) {
-        const tl = gsap.timeline({
-          onComplete: () => router.push(url),
-        });
-        tl.to(blocksRef.current, {
-          scaleX: 1,
-          duration: 0.4,
-          stagger: 0.02,
-          ease: "power2.out",
-          transformOrigin: "left",
-        });
-        return;
-      }
-
-      const length = path.getTotalLength();
+    // If the logo path doesn't exist for some reason, fallback safely
+    if (!path) {
       const tl = gsap.timeline({
-        onComplete: () => router.push(url), // Route changes while Logo is STILL visible and filled!
+        onComplete: () => router.push(url),
       });
-
       tl.to(blocksRef.current, {
         scaleX: 1,
         duration: 0.4,
         stagger: 0.02,
         ease: "power2.out",
         transformOrigin: "left",
-      })
-        .addLabel("revealFinished")
-        .set(logoOverlayRef.current, { opacity: 1 }, "revealFinished-=0.2")
-        .set(
-          path,
-          {
-            strokeDasharray: length,
-            strokeDashoffset: length,
-            fill: "transparent",
-          },
-          "revealFinished-=0.2",
-        )
-        .to(
-          path,
-          {
-            strokeDashoffset: 0,
-            duration: 2,
-            ease: "power2.inOut",
-          },
-          "revealFinished+=0.1",
-        )
-        .to(
-          path,
-          {
-            fill: "#e3e4d8",
-            duration: 1,
-            ease: "power2.out",
-          },
-          "-=0.5",
-        );
+      });
+      return;
+    }
 
-      // REMOVED: The logo fade-out has been extracted from here!
-    }),
-    [contextSafe, router, lenis],
-  );
+    const length = path.getTotalLength();
+    const tl = gsap.timeline({
+      onComplete: () => router.push(url), // Route changes while Logo is STILL visible and filled!
+    });
+
+    tl.to(blocksRef.current, {
+      scaleX: 1,
+      duration: 0.4,
+      stagger: 0.02,
+      ease: "power2.out",
+      transformOrigin: "left",
+    })
+      .addLabel("revealFinished")
+      .set(logoOverlayRef.current, { opacity: 1 }, "revealFinished-=0.2")
+      .set(
+        path,
+        {
+          strokeDasharray: length,
+          strokeDashoffset: length,
+          fill: "transparent",
+        },
+        "revealFinished-=0.2",
+      )
+      .to(
+        path,
+        {
+          strokeDashoffset: 0,
+          duration: 2,
+          ease: "power2.inOut",
+        },
+        "revealFinished+=0.1",
+      )
+      .to(
+        path,
+        {
+          fill: "#e3e4d8",
+          duration: 1,
+          ease: "power2.out",
+        },
+        "-=0.5",
+      );
+
+    // REMOVED: The logo fade-out has been extracted from here!
+  });
 
   const handleRouteChange = useCallback(
     (url) => {
@@ -103,7 +95,9 @@ const PageTransition = ({ children }) => {
       isTransitioning.current = true;
       coverPage(url);
     },
-    [coverPage],
+    // coverPage is from contextSafe which is stable across renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   // Entrance animation: Fires instantly when Next.js completes the route change

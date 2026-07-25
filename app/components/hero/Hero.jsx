@@ -5,6 +5,8 @@ import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import { Flip } from "gsap/Flip";
 import styles from "./hero.module.css";
+import Image from "next/image";
+import Logo from "../logo/Logo";
 
 gsap.registerPlugin(SplitText, Flip);
 
@@ -227,7 +229,7 @@ const Hero = () => {
 
       <div ref={sidebarRef} className={styles.sidebar}>
         <div className={styles.logo}>
-          <img src={heroImages[0].src} alt="Logo branding icon" />
+          <Logo />
         </div>
         <div className={styles.dividerVertical} />
       </div>
@@ -239,10 +241,12 @@ const Hero = () => {
             ref={(el) => (imgRefs.current[i] = el)}
             className={styles.img}
           >
-            <img
+            <Image
               src={img.src}
               alt={img.alt}
-              loading={i < 5 ? "eager" : "lazy"}
+              fill
+              sizes="20vw"
+              priority={i < 5}
             />
           </div>
         ))}
