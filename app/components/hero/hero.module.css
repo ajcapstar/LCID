@@ -34,7 +34,7 @@
   display: flex;
   height: 120px;
   font-size: 120px;
-  line-height: 150px;
+  line-height: 120px;
   /* clip-path masks the digit strip instead of overflow: hidden */
   clip-path: polygon(0 0, 100% 0, 100% 120px, 0 120px);
   z-index: 50;
@@ -46,8 +46,14 @@
   font-weight: 800;
   color: var(--hero-fg);
   position: relative;
-  top: -15px;
+  height: 120px;
   display: block;
+}
+
+.digit span {
+  display: block;
+  height: 120px;
+  line-height: 120px;
 }
 
 /* Kerning offsets so "100" digits overlap naturally */

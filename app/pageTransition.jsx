@@ -1,5 +1,6 @@
 "use client";
 import Logo from "@/app/logo";
+
 import { useRef, useCallback, createContext, useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { gsap } from "gsap";
@@ -29,10 +30,55 @@ const PageTransition = ({ children }) => {
 
     if (lenis) lenis.stop(); // Freeze scrolling immediately
 
+    const isSamePage =
+      url === pathname || url === `${pathname}/` || `${url}/` === pathname;
+
+    const triggerEntrance = () => {
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: true });
+      }
+      gsap.set(blocksRef.current, { scaleX: 1, transformOrigin: "right" });
+      const entranceTl = gsap.timeline({
+        onComplete: () => {
+          isTransitioning.current = false;
+          if (lenis) {
+            lenis.start();
+            lenis.resize();
+            gsap.delayedCall(0.1, () => lenis.resize());
+          }
+        },
+      });
+
+      entranceTl
+        .to(logoOverlayRef.current, {
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.out",
+        })
+        .to(
+          blocksRef.current,
+          {
+            scaleX: 0,
+            duration: 0.4,
+            stagger: 0.02,
+            ease: "power2.out",
+            transformOrigin: "right",
+          },
+          "-=0.3",
+        );
+    };
+
+    const handleComplete = () => {
+      router.push(url);
+      if (isSamePage) {
+        triggerEntrance();
+      }
+    };
+
     // If the logo path doesn't exist for some reason, fallback safely
     if (!path) {
       const tl = gsap.timeline({
-        onComplete: () => router.push(url),
+        onComplete: handleComplete,
       });
       tl.to(blocksRef.current, {
         scaleX: 1,
@@ -46,7 +92,7 @@ const PageTransition = ({ children }) => {
 
     const length = path.getTotalLength();
     const tl = gsap.timeline({
-      onComplete: () => router.push(url), // Route changes while Logo is STILL visible and filled!
+      onComplete: handleComplete,
     });
 
     tl.to(blocksRef.current, {
@@ -63,6 +109,7 @@ const PageTransition = ({ children }) => {
         {
           strokeDasharray: length,
           strokeDashoffset: length,
+          stroke: "#e3e4d8",
           fill: "transparent",
         },
         "revealFinished-=0.2",
@@ -71,7 +118,7 @@ const PageTransition = ({ children }) => {
         path,
         {
           strokeDashoffset: 0,
-          duration: 2,
+          duration: 1.8,
           ease: "power2.inOut",
         },
         "revealFinished+=0.1",
@@ -80,13 +127,11 @@ const PageTransition = ({ children }) => {
         path,
         {
           fill: "#e3e4d8",
-          duration: 1,
+          duration: 0.8,
           ease: "power2.out",
         },
-        "-=0.5",
+        "-=0.4",
       );
-
-    // REMOVED: The logo fade-out has been extracted from here!
   });
 
   const handleRouteChange = useCallback(

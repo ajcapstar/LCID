@@ -6,7 +6,8 @@ import { SplitText } from "gsap/SplitText";
 import { Flip } from "gsap/Flip";
 import styles from "./hero.module.css";
 import Image from "next/image";
-import Logo from "../logo/Logo";
+// import Logo from "../logo/Logo";
+import Logo from "@/app/logo";
 
 gsap.registerPlugin(SplitText, Flip);
 
@@ -34,7 +35,10 @@ const Hero = () => {
 
       // 1. Initial State Settings (Matches line 127: gsap.set(".img", { scale: 0 }))
       gsap.set(imgs, { scale: 0 });
-      gsap.set(`.${styles.dividerVertical}`, { scaleY: 0, transformOrigin: "top" });
+      gsap.set(`.${styles.dividerVertical}`, {
+        scaleY: 0,
+        transformOrigin: "top",
+      });
       gsap.set(`.${styles.divider}`, { scaleX: 0, transformOrigin: "left" });
       gsap.set(`.${styles.logo}`, { scale: 0 });
 
@@ -57,15 +61,24 @@ const Hero = () => {
       const textLines = heroRef.current.querySelectorAll(".text-line span");
       gsap.set(textLines, { y: "100%" });
 
-      /* ── 3. Build digit strips safely ─────────────────────── */
-      digits.forEach((el) => {
+      /* ── 3. Animate counter digits (Matching exact screenshot timings) ────────── */
+      // counter-1 (digits[0]): target 1 (0 -> 1)
+      // counter-2 (digits[1]): target 10 (0 -> 9 -> 0)
+      // counter-3 (digits[2]): target 30 (0 -> 9 3x -> 0)
+      const counterConfigs = [
+        { target: 1, duration: 2, delay: 1.5 },
+        { target: 10, duration: 3, delay: 0 },
+        { target: 30, duration: 2.5, delay: 0 },
+      ];
+
+      digits.forEach((el, i) => {
         el.innerHTML = "";
+        const config = counterConfigs[i];
         const strip = document.createElement("div");
         strip.style.cssText = "display:flex;flex-direction:column;";
-        for (let n = 0; n <= 9; n++) {
+        for (let n = 0; n <= config.target; n++) {
           const span = document.createElement("span");
-          span.textContent = n;
-          span.style.display = "block";
+          span.textContent = n % 10;
           strip.appendChild(span);
         }
         el.appendChild(strip);
@@ -73,42 +86,35 @@ const Hero = () => {
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      /* ── 4. Animate counter digits (Matching exact screenshot timings) ────────── */
-      // Screenshot timings mapping:
-      // counter-1 (digits[0]): target 1, duration 2, delay 1.5
-      // counter-2 (digits[1]): target 10, duration 3, delay 0
-      // counter-3 (digits[2]): target 30, duration 2.5, delay 0
-      const counterConfigs = [
-        { target: 1, duration: 2, delay: 1.5 },
-        { target: 10, duration: 3, delay: 0 },
-        { target: 30, duration: 2.5, delay: 0 }
-      ];
-      
+      /* ── 4. Animate counter digits ────────── */
       digits.forEach((el, i) => {
         const strip = el.firstChild;
-        const spanH = el.getBoundingClientRect().height || 120;
+        const firstSpan = strip ? strip.querySelector("span") : null;
+        const spanH = firstSpan
+          ? firstSpan.getBoundingClientRect().height
+          : 120;
         const config = counterConfigs[i];
-        
+
         tl.to(
           strip,
           {
-            y: -(config.target * spanH),
+            y: -(config.target * (spanH || 120)),
             duration: config.duration,
             ease: "power2.inOut",
           },
-          config.delay
+          config.delay,
         );
       });
 
       /* ── 5. Reveal background and scale in images (Matching screenshot timing) ─────────────────────────────── */
       tl.to(
-        heroBgRef.current, 
-        { 
-          scaleY: 1, 
-          duration: 3, 
-          ease: "power2.inOut" 
-        }, 
-        0.25 // absolute 0.25s
+        heroBgRef.current,
+        {
+          scaleY: 1,
+          duration: 3,
+          ease: "power2.inOut",
+        },
+        0.25, // absolute 0.25s
       );
 
       tl.to(
@@ -117,51 +123,52 @@ const Hero = () => {
           scale: 1,
           duration: 1,
           stagger: 0.125,
-          ease: "power3.out"
+          ease: "power3.out",
         },
-        "<" // starts at the exact same time as the background reveal above
+        "<", // starts at the exact same time as the background reveal above
       );
 
       /* ── 6. Fade counter out & trigger FLIP Scatter ──────────────────────────────── */
-      const counterContainer = heroRef.current.querySelector(`.${styles.counter}`);
-      
-      tl.to(
-        counterContainer, 
-        { 
-          opacity: 0, 
-          duration: 0.3, 
-          ease: "power3.out",
-          delay: 0.3,
-          onStart: () => {
-            /* ── 7. FLIP Scattering Effect (Triggered via onStart) ────────── */
-            imgs.forEach((img) => img.classList.remove(styles.animateOut));
-            const state = Flip.getState(imgs);
-            imgs.forEach((img) => img.classList.add(styles.animateOut));
-
-            const flipAnim = Flip.from(state, {
-              duration: 1,
-              stagger: 0.1,
-              ease: "power3.inOut",
-              absolute: true,
-            });
-
-            const scatterTimeline = gsap.timeline();
-            scatterTimeline.add(flipAnim, 0);
-
-            // Combined dynamic scaling sub-timelines (Re-applied in parallel)
-            imgs.forEach((el, i) => {
-              const scaleTimeline = gsap.timeline();
-              scaleTimeline
-                .to(el, { scale: 2.5, duration: 0.45, ease: "power3.in" }, 0.025)
-                .to(el, { scale: 1, duration: 0.45, ease: "power3.out" }, 0.5);
-              scatterTimeline.add(scaleTimeline, i * 0.1);
-            });
-          }
-        }
+      const counterContainer = heroRef.current.querySelector(
+        `.${styles.counter}`,
       );
 
+      tl.to(counterContainer, {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power3.out",
+        delay: 0.3,
+        onStart: () => {
+          /* ── 7. FLIP Scattering Effect (Triggered via onStart) ────────── */
+          imgs.forEach((img) => img.classList.remove(styles.animateOut));
+          const state = Flip.getState(imgs);
+          imgs.forEach((img) => img.classList.add(styles.animateOut));
+
+          const flipAnim = Flip.from(state, {
+            duration: 1,
+            stagger: 0.1,
+            ease: "power3.inOut",
+            absolute: true,
+          });
+
+          const scatterTimeline = gsap.timeline();
+          scatterTimeline.add(flipAnim, 0);
+
+          // Combined dynamic scaling sub-timelines (Re-applied in parallel)
+          imgs.forEach((el, i) => {
+            const scaleTimeline = gsap.timeline();
+            scaleTimeline
+              .to(el, { scale: 2.5, duration: 0.45, ease: "power3.in" }, 0.025)
+              .to(el, { scale: 1, duration: 0.45, ease: "power3.out" }, 0.5);
+            scatterTimeline.add(scaleTimeline, i * 0.1);
+          });
+        },
+      });
+
       /* ── 8. Reveal sidebar divider ── */
-      const sidebarDivider = heroRef.current.querySelector(`.${styles.dividerVertical}`);
+      const sidebarDivider = heroRef.current.querySelector(
+        `.${styles.dividerVertical}`,
+      );
       tl.to(sidebarDivider, {
         scaleY: "100%",
         duration: 1,
@@ -171,7 +178,9 @@ const Hero = () => {
 
       /* ── 8.5 Reveal horizontal dividers (Matching Screenshot) ── */
       // Targets the horizontal divider inside site-info (and optionally a nav if it exists)
-      const siteInfoDivider = heroRef.current.querySelector(`.${styles.siteInfo} .${styles.divider}`);
+      const siteInfoDivider = heroRef.current.querySelector(
+        `.${styles.siteInfo} .${styles.divider}`,
+      );
       const navDivider = document.querySelector("nav [class*='divider']");
       const horizontalDividers = [navDivider, siteInfoDivider].filter(Boolean);
 
@@ -183,7 +192,7 @@ const Hero = () => {
           stagger: 0.5,
           ease: "power3.inOut",
         },
-        "<" // Starts exactly with the sidebar divider animation above
+        "<", // Starts exactly with the sidebar divider animation above
       );
 
       /* ── 8.7 Reveal logo (Matching Screenshot) ── */
@@ -195,7 +204,7 @@ const Hero = () => {
           duration: 1,
           ease: "power4.inOut",
         },
-        "<" // Starts exactly with the horizontal dividers
+        "<", // Starts exactly with the horizontal dividers
       );
 
       /* ── 9. Reveal text lines (Matching Screenshot) ── */
@@ -207,7 +216,7 @@ const Hero = () => {
           stagger: 0.1,
           ease: "power4.out",
         },
-        "<" // Starts exactly alongside the logo scale animation (and insertion of the first text tween)
+        "<", // Starts exactly alongside the logo scale animation (and insertion of the first text tween)
       );
     },
     { scope: heroRef },
@@ -228,9 +237,9 @@ const Hero = () => {
       </div>
 
       <div ref={sidebarRef} className={styles.sidebar}>
-        <div className={styles.logo}>
+        {/* <div className={styles.logo}>
           <Logo />
-        </div>
+        </div> */}
         <div className={styles.dividerVertical} />
       </div>
 
@@ -257,7 +266,10 @@ const Hero = () => {
       </div>
 
       <div ref={siteInfoRef} className={styles.siteInfo}>
-        <h2>A design team focused on brands, websites, apps&nbsp;&amp;&nbsp;products</h2>
+        <h2>
+          A design team focused on brands, websites,
+          apps&nbsp;&amp;&nbsp;products
+        </h2>
         <div className={styles.divider} />
         <div className={styles.siteInfoCopy}>
           <p>Award-winning creative studio</p>
