@@ -36,7 +36,7 @@ h1 {
   text-transform: uppercase;
   color: #141414;
   line-height: 1;
-  font-size: 12rem;
+  font-size: 6rem;
 }
 a {
   text-decoration: none;
@@ -147,4 +147,17 @@ nav {
   h1 {
     font-size: 6rem;
   }
+}
+
+/* Lenis Smooth Scroll Styles */
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
