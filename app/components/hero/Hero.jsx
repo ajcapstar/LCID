@@ -260,7 +260,6 @@ const Hero = () => {
           </div>
         ))}
       </div>
-
       <div ref={headerRef} className={styles.header}>
         <h1>Visual engineering for modern brands</h1>
       </div>
